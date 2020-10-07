@@ -1,0 +1,26 @@
+<annotation>
+	<folder>Data Design</folder>
+	<filename>rice.jpg</filename>
+	<path>C:\Users\Samsung\Downloads\Data Design\rice.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>800</width>
+		<height>800</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>bag_of_rice</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>8</xmin>
+			<ymin>4</ymin>
+			<xmax>769</xmax>
+			<ymax>762</ymax>
+		</bndbox>
+	</object>
+</annotation>

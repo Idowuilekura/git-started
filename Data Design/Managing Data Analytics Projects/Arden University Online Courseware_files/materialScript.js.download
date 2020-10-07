@@ -1,0 +1,42 @@
+$(document).ready(function(){$('div.preziVideo').addClass('embed-responsive embed-responsive-16by9');$('div.preziVideo').find('iframe').addClass('embed-responsive-item');$('div.vimeoVideo').addClass('embed-responsive embed-responsive-16by9');$('div.vimeoVideo').find('iframe').addClass('embed-responsive-item');$('div.vimeoVideo').find('iframe').attr({'allowfullscreen':'','webkitAllowFullScreen':'','mozAllowFullScreen':''});$('div.youtubeVideo').addClass('embed-responsive embed-responsive-16by9');$('div.youtubeVideo').find('iframe').addClass('embed-responsive-item');$('div.youtubeVideo').find('iframe').attr({'allowfullscreen':'','webkitAllowFullScreen':'','mozAllowFullScreen':''});var moduleurl=window.location.href;var pathArray=window.location.pathname.split('/');var lessonPage=pathArray.pop();var lessonArray=lessonPage.split('_',2);var lessonNo=lessonArray[1];var lessonClass=parseInt(lessonNo,10)-1;var courseCookieValue=$.cookie('CurrentCourseid');if(courseCookieValue!=''){$('.modulelink').attr('href','/course/view.php?id='+courseCookieValue);$('#backtomodule').attr('href','/course/view.php?id='+courseCookieValue+'&section=1#collapseListGroupHeading'+lessonClass);}
+var cookvalue=$.cookie('CurrentNotebookid');if(cookvalue!=null){$('.notebook-button').show();var bigModal=$('#notebookModal');var modalBody=bigModal.find('#notebook-form');$('button#notebook-add').on('click',function(e){e.preventDefault();if(!this.disabled){bigModal.show();modalBody.html('<iframe frameborder="0" width="100%" height="'+($(window).height()-300)+'" src="/mod/notebook/ajax_editpost.php?blog='+cookvalue+'"><\/iframe>');$('#notebook-msg').html('');}});}else{$('.notebook-button').hide();}
+var brokenLinkModalCode='<div class="modal fade" tabindex="-1" role="dialog" id="brokenLinkModal" aria-hidden="true"> \
+		  <div class="modal-dialog" role="document"> \
+		    <div class="modal-content"> \
+		      <div class="modal-header">\
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\
+		        <h4 class="modal-title">Report a broken link</h4>\
+		      </div>\
+		      <div id="brokenLink-body" class="modal-body">\
+		      </div>\
+		      <div class="modal-footer">\
+		        <button type="button" class="btn btn-default" data-dismiss="modal" id="closeModal">Cancel</button>\
+		        <button type="button" class="btn btn-primary" id="sendBrokenLink">Send details</button>\
+		      </div>\
+		    </div>\
+		  </div>\
+		</div>';$('header').append(brokenLinkModalCode);$('.main-content').find('p').find('a').each(function(index){$(this).addClass('link link-'+index);$(this).attr('data-content','<a href="#" id="reportlink-'+index+'" data-toggle="modal" data-target="#brokenLinkModal">Report this link as broken</a>');});$('.link').attr('data-popover','true');$('.link').attr('data-html','true');var originalLeave=$.fn.popover.Constructor.prototype.leave;$.fn.popover.Constructor.prototype.leave=function(obj){var self=obj instanceof this.constructor?obj:$(obj.currentTarget)[this.type](this.getDelegateOptions()).data('bs.'+this.type)
+var container,timeout;originalLeave.call(this,obj);if(obj.currentTarget){container=$(obj.currentTarget).siblings('.popover');timeout=self.timeout;container.one('mouseenter',function(){container.one('click',function(){addressValue=$(obj.currentTarget).attr('href');var brokenLinkModal=$('#brokenLinkModal');var brokenLinkmodalBody=brokenLinkModal.find('#brokenLink-body');brokenLinkModal.show();brokenLinkmodalBody.html('<form id="brokenLinkForm" class="form-horizontal">\
+			    			<div class="form-group">\
+				        		<label for="inputLink" class="col-sm-3 control-label">Link to report</label>\
+				        		<div class="col-sm-9">\
+							    	<input disabled type="text" class="form-control" name="link" value="'+addressValue+'" >\
+							    </div>\
+				        	</div>\
+				        	<div class="form-group">\
+				        		<label for="inputURL" class="col-sm-3 control-label">Comments (optional): </label>\
+				        		<div class="col-sm-9">\
+							    	<textarea class="form-control" rows="2" name="comments"></textarea>\
+							    </div>\
+				        	</div>\
+				        	<input type="hidden" name="courseid" value="'+courseCookieValue+'">\
+				        	<input type="hidden" name="pageurl" value="'+moduleurl+'">\
+				        	<input type="hidden" name="link" value="'+addressValue+'" >\
+				        	</div></form><div id="brokenLinkmsg">');})
+clearTimeout(timeout);container.one('mouseleave',function(){$.fn.popover.Constructor.prototype.leave.call(self,self);});})}};$('body').popover({selector:'[data-popover]',trigger:'hover',placement:'auto',delay:{show:50,hide:400}});$('#sendBrokenLink').click(function(event){event.preventDefault();$.ajax({type:"POST",url:"/local/blrlogging/send_broken_link.php",data:$('form#brokenLinkForm').serialize(),async:false,success:function(msgsuccess){var msgsuccess='You sent the details for the broken link successfully.';$("#brokenLinkmsg").html(msgsuccess);$('#brokenLinkForm').hide();setTimeout(function(){$('#closeModal').trigger('click');},1500);setTimeout(function(){$('#brokenLinkForm').remove();},1510);},error:function(msgfail){var msgfail='Something went wrong. The details for the broken link were not sent successfully.';$("#brokenLinkmsg").html(msgfail);}});});var touch=false;if(navigator.userAgent.match(/iPad/g)||navigator.userAgent.match(/iPhone/g)||navigator.userAgent.match(/Tablet/g)||navigator.userAgent.match(/Android/g))
+{touch=true;}
+$("#navigation-ham").mouseleave(function(){$("#navigation-ham").hide();$("#overlay").fadeOut(400,function(){$(this).remove();});});var mouseX=0;var mouseY=0;$('.navigationbtn').on('click',function(e){mouseX=e.clientX-250;mouseY=e.clientY+20;$('#navigation-ham').animate({'top':mouseY,'left':mouseX,'width':'toggle'},0,'linear',function(){var isVisible=$("#navigation-ham").is(":visible");if(isVisible){var docHeight=$(document).height();var overlayDiv="<div id='overlay'></div>";$(overlayDiv).hide().appendTo('body').fadeIn(400);$("#overlay").height(docHeight);}else{$("#overlay").fadeOut(400,function(){$(this).remove();});}});});$(document).mouseup(function(e){var container=$('#navigation-ham');if(!container.is(e.target)&&container.has(e.target).length===0)
+{container.hide();$("#overlay").fadeOut(400,function(){$(this).remove();});}});if(!touch){$('[data-toggle="tooltip"]').tooltip()}
+$('#backToTopBtn').click(function(){$('html,body').animate({scrollTop:0},'slow');return false;});if(($(window).height()+100)<$(document).height()){$('.back-top').removeClass('hidden').affix({offset:{top:100}});}
+$(document).delegate('*[data-toggle="lightbox"]:not([data-gallery="navigateTo"])','click',function(event){event.preventDefault();$(this).ekkoLightbox();});});function doPageJump(pageJump)
+{window.location.href=pageJump.options[pageJump.options.selectedIndex].value;}
